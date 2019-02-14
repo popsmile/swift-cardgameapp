@@ -31,4 +31,8 @@ enum Rank: Int, CaseIterable {
         }
     }
 
+    var next: Rank? {
+        return Rank(rawValue: self.rawValue + 1)
+    }
+
 }

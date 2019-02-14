@@ -21,17 +21,24 @@ class Card: CustomStringConvertible {
         return "\(suit.firstLetter)\(rank.value)"
     }
 
-    func hasSame(_ rank: Rank) -> Bool {
-        return self.rank == rank
+    func hasSameColor(with card: Card) -> Bool {
+        return self.suit.hasSameColor(with: card.suit)
     }
 
-    func hasSame(_ suit: Suit) -> Bool {
-        return self.suit == suit
+    func isNextHigher(than card: Card) -> Bool {
+        guard let next = card.rank.next else { return false }
+        return self.rank == next
+    }
+
+    func isNextLower(than card: Card) -> Bool {
+        guard let next = self.rank.next else { return false }
+        return next == card.rank
     }
 
 }
 
 extension Card: Comparable {
+
     static func < (lhs: Card, rhs: Card) -> Bool {
         if lhs.rank == rhs.rank {
             return lhs.suit.rawValue < rhs.suit.rawValue
@@ -45,4 +52,5 @@ extension Card: Comparable {
     static func == (lhs: Card, rhs: Card) -> Bool {
         return lhs.rank == rhs.rank && lhs.suit == rhs.suit
     }
+
 }

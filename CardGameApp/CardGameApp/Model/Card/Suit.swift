@@ -32,4 +32,8 @@ enum Suit: Int, CaseIterable {
         return letters.first!
     }
 
+    func hasSameColor(with suit: Suit) -> Bool {
+        return self.rawValue + suit.rawValue == 5 || self.rawValue == suit.rawValue
+    }
+
 }
