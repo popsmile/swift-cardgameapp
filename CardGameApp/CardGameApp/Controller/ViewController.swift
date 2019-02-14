@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     private var cardGameView: CardGameView!
+    private var cardGameViewModel: CardGameViewModel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +28,9 @@ class ViewController: UIViewController {
     }
 
     private func setCardGameView() {
-        cardGameView = CardGameView(frame: view.frame, viewModel: CardGameViewModel())
+        cardGameViewModel = CardGameViewModel()
+        cardGameView = CardGameView(frame: view.frame, viewModel: cardGameViewModel)
+        cardGameView.delegate = self
         view.addSubview(cardGameView)
     }
 
@@ -35,7 +38,16 @@ class ViewController: UIViewController {
         super.motionEnded(motion, with: event)
         if motion == .motionShake {
             cardGameView.reset()
+            cardGameViewModel.reset()
         }
+    }
+
+}
+
+extension ViewController: CardGameViewDelegate {
+
+    func cardGameViewWillOpenCard(_ cardGameView: CardGameView) {
+        cardGameViewModel.openCardFromCardDeck()
     }
 
 }

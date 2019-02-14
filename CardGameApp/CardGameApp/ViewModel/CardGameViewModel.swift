@@ -8,12 +8,7 @@
 
 import Foundation
 
-protocol CardGameViewModelProtocol {
-    func openCardFromCardDeck()
-    func reset()
-}
-
-class CardGameViewModel: CardGameViewModelProtocol {
+class CardGameViewModel {
     private var cardGame: CardGame
     
     var cardStacksViewModel: CardStacksViewModel

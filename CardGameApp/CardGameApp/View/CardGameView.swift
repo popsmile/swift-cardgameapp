@@ -8,8 +8,12 @@
 
 import UIKit
 
+protocol CardGameViewDelegate {
+    func cardGameViewWillOpenCard(_ cardGameView: CardGameView)
+}
+
 class CardGameView: UIView {
-    private var viewModel: CardGameViewModelProtocol!
+    var delegate: CardGameViewDelegate?
 
     private var cardSpacesView: CardSpacesView!
     private var cardPileView: CardPileView!
@@ -26,7 +30,6 @@ class CardGameView: UIView {
 
     convenience required init(frame: CGRect, viewModel: CardGameViewModel) {
         self.init(frame: frame)
-        self.viewModel = viewModel
         setUp(frame: frame, viewModel: viewModel)
     }
 
@@ -63,7 +66,8 @@ extension CardGameView {
         guard let touch = touches.first else { return }
         
         if touch.view == cardDeckView {
-            viewModel.openCardFromCardDeck()
+            guard let delegate = delegate else { return }
+            delegate.cardGameViewWillOpenCard(self)
             moveCardViewFromCardDeckView()
         }
     }
@@ -76,7 +80,6 @@ extension CardGameView {
     /* Shake Motion */
     func reset() {
         moveCardViewsToCardDeckView()
-        viewModel.reset()
     }
 
     private func moveCardViewsToCardDeckView() {
