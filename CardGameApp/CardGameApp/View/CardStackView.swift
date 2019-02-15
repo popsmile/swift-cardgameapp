@@ -21,6 +21,7 @@ class CardStackView: UIView {
     convenience init(frame: CGRect, viewModel: CardStackViewModel) {
         self.init(frame: frame)
         createCardViews(with: viewModel)
+        addDoubleTapGestureRecognizer()
     }
 
     private func createCardViews(with viewModel: CardStackViewModel) {
@@ -34,4 +35,32 @@ class CardStackView: UIView {
         }
     }
 
+    private func addDoubleTapGestureRecognizer() {
+        for cardView in subviews {
+            let doubleTapGestureRecognizer = DoubleTapGestureRecognizer(target: self, action: #selector(handleDoubleTapGesture(sender:)))
+            cardView.addGestureRecognizer(doubleTapGestureRecognizer)
+        }
+    }
+
+    @objc private func handleDoubleTapGesture(sender: UITapGestureRecognizer) {
+        guard let cardStacksView = superview as? UIStackView else { return }
+        guard let indexOfCardStack = cardStacksView.arrangedSubviews.firstIndex(of: self) else { return }
+        
+        guard let cardView = sender.view else { return }
+        guard let indexOfCard = subviews.firstIndex(of: cardView) else { return }
+        
+        let userInfo = [Notification.InfoKey.indexOfCard: indexOfCard,
+                        Notification.InfoKey.indexOfCardStack: indexOfCardStack]
+        NotificationCenter.default.post(name: .cardDidDoubleTapped, object: self, userInfo: userInfo)
+    }
+
+}
+
+extension Notification.Name {
+    static let cardDidDoubleTapped = Notification.Name("cardDidDoubleTapped")
+}
+
+extension Notification.InfoKey {
+    static let indexOfCard = "indexOfCard"
+    static let indexOfCardStack = "indexOfCardStack"
 }

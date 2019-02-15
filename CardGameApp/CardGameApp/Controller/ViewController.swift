@@ -16,6 +16,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         setBackground()
         setCardGameView()
+        registerAsObserver()
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -32,6 +33,14 @@ class ViewController: UIViewController {
         cardGameView = CardGameView(frame: view.frame, viewModel: cardGameViewModel)
         cardGameView.delegate = self
         view.addSubview(cardGameView)
+    }
+
+    private func registerAsObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDoubleTap(_:)), name: .cardDidDoubleTapped, object: nil)
+    }
+
+    @objc private func handleDoubleTap(_ notification: Notification) {
+        print("더블탭: \(notification.userInfo!)")
     }
 
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {

@@ -28,6 +28,7 @@ class CardView: UIImageView {
 
     private func setUp() {
         roundCorners()
+        isUserInteractionEnabled = true
     }
 
     private func roundCorners() {
