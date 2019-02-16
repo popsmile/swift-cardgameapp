@@ -55,4 +55,8 @@ extension CardStackViewModel {
         }
     }
 
+    func accessCardViewModel(at index: Int, by deliver: (CardViewModel) -> Int?) -> Int? {
+        return deliver(cardViewModels[index])
+    }
+
 }

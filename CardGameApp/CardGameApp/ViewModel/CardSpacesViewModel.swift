@@ -9,17 +9,25 @@
 import Foundation
 
 class CardSpacesViewModel {
+    private let count = 4
     private var cardSpaceViewModels: [CardSpaceViewModel]
 
     required init() {
-        self.cardSpaceViewModels = Array(repeating: CardSpaceViewModel(), count: 4)
+        cardSpaceViewModels = []
+        setCardSpaceViewModels()
     }
 
-    func push(cardViewModel card: CardViewModel) -> Bool {
-        for cardSpace in cardSpaceViewModels {
-            if cardSpace.push(cardViewModel: card) { return true }
+    private func setCardSpaceViewModels() {
+        for _ in 0..<count {
+            cardSpaceViewModels.append(CardSpaceViewModel())
         }
-        return false
+    }
+
+    func push(cardViewModel card: CardViewModel) -> Int? {
+        for (index, cardSpace) in cardSpaceViewModels.enumerated() {
+            if cardSpace.push(cardViewModel: card) { return index }
+        }
+        return nil
     }
 
 }

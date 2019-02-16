@@ -14,20 +14,14 @@ class CardGameViewModel {
     var cardStacksViewModel: CardStacksViewModel
     var cardDeckViewModel: CardDeckViewModel
     var cardPileViewModel: CardPileViewModel
+    var cardSpacesViewModel: CardSpacesViewModel
 
     init() {
         cardGame = CardGame()
         cardStacksViewModel = CardStacksViewModel(cardStacks: cardGame.cardStacks)
         cardDeckViewModel = CardDeckViewModel(cardDeck: cardGame.cardDeck)
         cardPileViewModel = CardPileViewModel()
-    }
-
-    private func moveCardViewModelsToCardDeckViewModel() {
-        while !cardPileViewModel.isEmpty {
-            guard let cardViewModel = cardPileViewModel.pop() else { return }
-            cardViewModel.flip()
-            cardDeckViewModel.push(cardViewModel)
-        }
+        cardSpacesViewModel = CardSpacesViewModel()
     }
 
 }
@@ -42,12 +36,32 @@ extension CardGameViewModel {
         cardPileViewModel.push(cardViewModel)
     }
 
+    /* Double Tap */
+    func moveToSpace(indexOfCard: Int, indexOfCardStack: Int) -> Int? {
+        let location = cardStacksViewModel.accessCardViewModel(at: indexOfCard, of: indexOfCardStack) {
+            [unowned self] cardViewModel in self.cardSpacesViewModel.push(cardViewModel: cardViewModel)
+        }
+        return location
+    }
+
+    func moveToStacks(indexOfCard: Int, indexOfCardStack: Int) -> Int {
+        return 0
+    }
+
     /* Shake Motion */
     func reset() {
         cardGame.reset()
         cardStacksViewModel.replace(cardStacks: cardGame.cardStacks)
         moveCardViewModelsToCardDeckViewModel()
         cardDeckViewModel.replace(cardDeck: cardGame.cardDeck)
+    }
+
+    private func moveCardViewModelsToCardDeckViewModel() {
+        while !cardPileViewModel.isEmpty {
+            guard let cardViewModel = cardPileViewModel.pop() else { return }
+            cardViewModel.flip()
+            cardDeckViewModel.push(cardViewModel)
+        }
     }
 
 }
