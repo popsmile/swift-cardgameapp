@@ -84,6 +84,8 @@
 		A3A799C4221000360018FCA0 /* CardSpacesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A799C3221000360018FCA0 /* CardSpacesView.swift */; };
 		A3A79A7B2216931A0018FCA0 /* DoubleTapGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A79A7A2216931A0018FCA0 /* DoubleTapGestureRecognizer.swift */; };
 		A3D854B0220344A60021AB3F /* CardStacksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3D854AF220344A60021AB3F /* CardStacksViewModel.swift */; };
+		A3E82CFC221869D4006AF1BD /* CardSpacesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E82CFB221869D4006AF1BD /* CardSpacesViewModel.swift */; };
+		A3E82CFE22186A4D006AF1BD /* CardSpaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3E82CFD22186A4D006AF1BD /* CardSpaceViewModel.swift */; };
 		A3FE067722082C9C0028B570 /* CardGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FE067622082C9C0028B570 /* CardGameView.swift */; };
 		A3FE06792208541D0028B570 /* CardDeckViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FE06782208541D0028B570 /* CardDeckViewModel.swift */; };
 		A3FE067D220858D90028B570 /* CardPileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3FE067C220858D90028B570 /* CardPileViewModel.swift */; };
@@ -192,6 +194,8 @@
 		A3A799C3221000360018FCA0 /* CardSpacesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSpacesView.swift; sourceTree = "<group>"; };
 		A3A79A7A2216931A0018FCA0 /* DoubleTapGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleTapGestureRecognizer.swift; sourceTree = "<group>"; };
 		A3D854AF220344A60021AB3F /* CardStacksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStacksViewModel.swift; sourceTree = "<group>"; };
+		A3E82CFB221869D4006AF1BD /* CardSpacesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSpacesViewModel.swift; sourceTree = "<group>"; };
+		A3E82CFD22186A4D006AF1BD /* CardSpaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardSpaceViewModel.swift; sourceTree = "<group>"; };
 		A3FE067622082C9C0028B570 /* CardGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardGameView.swift; sourceTree = "<group>"; };
 		A3FE06782208541D0028B570 /* CardDeckViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDeckViewModel.swift; sourceTree = "<group>"; };
 		A3FE067C220858D90028B570 /* CardPileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardPileViewModel.swift; sourceTree = "<group>"; };
@@ -242,6 +246,8 @@
 				A3FE06782208541D0028B570 /* CardDeckViewModel.swift */,
 				A3FE067C220858D90028B570 /* CardPileViewModel.swift */,
 				A3FE068122085D390028B570 /* CardGameViewModel.swift */,
+				A3E82CFD22186A4D006AF1BD /* CardSpaceViewModel.swift */,
+				A3E82CFB221869D4006AF1BD /* CardSpacesViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -615,6 +621,7 @@
 			files = (
 				A3FE068222085D390028B570 /* CardGameViewModel.swift in Sources */,
 				A372EFB321F71EEC004CEDE9 /* ViewController.swift in Sources */,
+				A3E82CFE22186A4D006AF1BD /* CardSpaceViewModel.swift in Sources */,
 				A372F11821FEA479004CEDE9 /* CardGameViewLayout.swift in Sources */,
 				A3A799C4221000360018FCA0 /* CardSpacesView.swift in Sources */,
 				A372F00E21F95F67004CEDE9 /* Card.swift in Sources */,
@@ -622,6 +629,7 @@
 				A372F01321F95F82004CEDE9 /* CardDeck.swift in Sources */,
 				A3FE06792208541D0028B570 /* CardDeckViewModel.swift in Sources */,
 				A372EFE221F85B82004CEDE9 /* CardView.swift in Sources */,
+				A3E82CFC221869D4006AF1BD /* CardSpacesViewModel.swift in Sources */,
 				A372F00C21F95F67004CEDE9 /* CardStacks.swift in Sources */,
 				A3FE067D220858D90028B570 /* CardPileViewModel.swift in Sources */,
 				A372EFB121F71EEC004CEDE9 /* AppDelegate.swift in Sources */,
