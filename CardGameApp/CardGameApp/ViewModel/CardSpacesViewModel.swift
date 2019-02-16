@@ -7,3 +7,19 @@
 //
 
 import Foundation
+
+class CardSpacesViewModel {
+    private var cardSpaceViewModels: [CardSpaceViewModel]
+
+    required init() {
+        self.cardSpaceViewModels = Array(repeating: CardSpaceViewModel(), count: 4)
+    }
+
+    func push(cardViewModel card: CardViewModel) -> Bool {
+        for cardSpace in cardSpaceViewModels {
+            if cardSpace.push(cardViewModel: card) { return true }
+        }
+        return false
+    }
+
+}
