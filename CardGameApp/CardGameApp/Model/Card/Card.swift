@@ -21,6 +21,10 @@ class Card: CustomStringConvertible {
         return "\(suit.firstLetter)\(rank.value)"
     }
 
+    var isLowest: Bool {
+        return rank == .A
+    }
+
     func hasSameColor(with card: Card) -> Bool {
         return self.suit.hasSameColor(with: card.suit)
     }
