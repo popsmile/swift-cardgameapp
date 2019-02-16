@@ -13,19 +13,19 @@ import Foundation
 // 또한, int 값을 저장하는 enum 은 case 에 순차적으로 값을 자동 할당해주기 때문에 선언부를 간략화할 수 있다고 생각했습니다.
 
 enum Rank: Int, CaseIterable {
-    case two = 2, three, four, five, six, seven, eight, nine, ten
-    case J, Q, K, A
+    case A = 1, two, three, four, five, six, seven, eight, nine, ten
+    case J, Q, K
 
     var value: String {
         switch self {
+        case .A:
+            return "A"
         case .J:
             return "J"
         case .Q:
             return "Q"
         case .K:
             return "K"
-        case .A:
-            return "A"
         default:
             return "\(self.rawValue)"
         }
