@@ -42,7 +42,7 @@ class CardStackView: UIView {
         }
     }
 
-    @objc private func handleDoubleTapGesture(sender: UITapGestureRecognizer) {
+    @objc private func handleDoubleTapGesture(sender: DoubleTapGestureRecognizer) {
         guard let cardStacksView = superview as? UIStackView else { return }
         guard let indexOfCardStack = cardStacksView.arrangedSubviews.firstIndex(of: self) else { return }
         
