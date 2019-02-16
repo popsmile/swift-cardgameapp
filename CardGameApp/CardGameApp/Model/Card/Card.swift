@@ -25,6 +25,10 @@ class Card: CustomStringConvertible {
         return rank == .A
     }
 
+    func hasSameSuit(with card: Card) -> Bool {
+        return self.suit == card.suit
+    }
+
     func hasSameColor(with card: Card) -> Bool {
         return self.suit.hasSameColor(with: card.suit)
     }

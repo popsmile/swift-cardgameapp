@@ -23,7 +23,7 @@ class CardSpaceViewModel {
         }
         
         guard let lastCard = cardViewModels.last else { return false }
-        guard card.hasSameColor(with: lastCard) else { return false }
+        guard card.hasSameSuit(with: lastCard) else { return false }
         
         if card.isNextHigher(than: lastCard) {
             cardViewModels.append(card)

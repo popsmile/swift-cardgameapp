@@ -37,6 +37,10 @@ class CardViewModel {
         return card.isLowest
     }
 
+    func hasSameSuit(with cardViewModel: CardViewModel) -> Bool {
+        return card.hasSameSuit(with: cardViewModel.card)
+    }
+
     func hasSameColor(with cardViewModel: CardViewModel) -> Bool {
         return card.hasSameColor(with: cardViewModel.card)
     }
