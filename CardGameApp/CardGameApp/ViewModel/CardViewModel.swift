@@ -33,6 +33,18 @@ class CardViewModel {
         NotificationCenter.default.post(name: .cardDidReset, object: self, userInfo: userInfo)
     }
 
+    func hasSameColor(with cardViewModel: CardViewModel) -> Bool {
+        return card.hasSameColor(with: cardViewModel.card)
+    }
+
+    func isNexthight(than cardViewModel: CardViewModel) -> Bool {
+        return card.isNextHigher(than: cardViewModel.card)
+    }
+
+    func isNextLower(than cardViewModel: CardViewModel) -> Bool {
+        return card.isNextLower(than: cardViewModel.card)
+    }
+
 }
 
 extension NSNotification.Name {
