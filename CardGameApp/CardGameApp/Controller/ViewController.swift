@@ -31,16 +31,21 @@ class ViewController: UIViewController {
     private func setCardGameView() {
         cardGameViewModel = CardGameViewModel()
         cardGameView = CardGameView(frame: view.frame, viewModel: cardGameViewModel)
-        cardGameView.delegate = self
         view.addSubview(cardGameView)
     }
 
     private func registerAsObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(handleDoubleTap(_:)), name: .cardDidDoubleTapped, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleTap(_:)), name: .cardDeckDidTapped, object: nil)
     }
 
     @objc private func handleDoubleTap(_ notification: Notification) {
         print("더블탭: \(notification.userInfo!)")
+    }
+
+    @objc private func handleTap(_ notification: Notification) {
+        cardGameViewModel.openCardFromCardDeck()
+        cardGameView.moveCardViewFromCardDeckView()
     }
 
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
@@ -49,14 +54,6 @@ class ViewController: UIViewController {
             cardGameView.reset()
             cardGameViewModel.reset()
         }
-    }
-
-}
-
-extension ViewController: CardGameViewDelegate {
-
-    func cardGameViewWillOpenCard(_ cardGameView: CardGameView) {
-        cardGameViewModel.openCardFromCardDeck()
     }
 
 }

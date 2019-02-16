@@ -8,13 +8,7 @@
 
 import UIKit
 
-protocol CardGameViewDelegate {
-    func cardGameViewWillOpenCard(_ cardGameView: CardGameView)
-}
-
 class CardGameView: UIView {
-    var delegate: CardGameViewDelegate?
-
     private var cardSpacesView: CardSpacesView!
     private var cardPileView: CardPileView!
     private var cardDeckView: CardDeckView!
@@ -61,18 +55,7 @@ class CardGameView: UIView {
 extension CardGameView {
 
     /* Touch */
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        guard let touch = touches.first else { return }
-        
-        if touch.view == cardDeckView {
-            guard let delegate = delegate else { return }
-            delegate.cardGameViewWillOpenCard(self)
-            moveCardViewFromCardDeckView()
-        }
-    }
-
-    private func moveCardViewFromCardDeckView() {
+    func moveCardViewFromCardDeckView() {
         guard let cardView = cardDeckView.pop() else { return }
         cardPileView.push(cardView)
     }

@@ -29,7 +29,7 @@ class CardDeckView: UIImageView {
     private func createCardViews(with viewModel: CardDeckViewModel) {
         viewModel.iterateCardViewModels { [unowned self] cardViewModel in
             let cardView = CardView(frame: self.bounds, viewModel: cardViewModel)
-            self.addSubview(cardView)
+            self.push(cardView)
         }
     }
 
@@ -41,8 +41,18 @@ class CardDeckView: UIImageView {
         image = UIImage(named: "cardgameapp-refresh-app")
     }
 
+    private func addTapGestureRecognizer(to view: CardView) {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+
+    @objc private func handleTap() {
+        NotificationCenter.default.post(name: .cardDeckDidTapped, object: self)
+    }
+
     func push(_ cardView: CardView) {
         addSubview(cardView)
+        addTapGestureRecognizer(to: cardView)
     }
 
     func pop() -> CardView? {
@@ -51,4 +61,8 @@ class CardDeckView: UIImageView {
         return cardView
     }
 
+}
+
+extension Notification.Name {
+    static let cardDeckDidTapped = NSNotification.Name("cardDeckDidTapped")
 }
