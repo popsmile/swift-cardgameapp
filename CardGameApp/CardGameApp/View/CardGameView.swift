@@ -54,7 +54,7 @@ class CardGameView: UIView {
 /* MARK: User interaction events */
 extension CardGameView {
 
-    /* Touch */
+    /* Tap */
     func moveCardViewFromCardDeckView() {
         guard let cardView = cardDeckView.pop() else { return }
         cardPileView.push(cardView)

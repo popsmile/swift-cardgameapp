@@ -22,25 +22,32 @@ class CardGameViewModel {
         cardPileViewModel = CardPileViewModel()
     }
 
-    func openCardFromCardDeck() {
-        guard let cardViewModel = cardDeckViewModel.pop() else { return }
-        cardViewModel.flip()
-        cardPileViewModel.push(cardViewModel)
-    }
-
-    func reset() {
-        cardGame.reset()
-        cardStacksViewModel.replace(cardStacks: cardGame.cardStacks)
-        moveCardViewModelsToCardDeckViewModel()
-        cardDeckViewModel.replace(cardDeck: cardGame.cardDeck)
-    }
-
     private func moveCardViewModelsToCardDeckViewModel() {
         while !cardPileViewModel.isEmpty {
             guard let cardViewModel = cardPileViewModel.pop() else { return }
             cardViewModel.flip()
             cardDeckViewModel.push(cardViewModel)
         }
+    }
+
+}
+
+/* MARK: User interaction events */
+extension CardGameViewModel {
+
+    /* Tap */
+    func openCardFromCardDeck() {
+        guard let cardViewModel = cardDeckViewModel.pop() else { return }
+        cardViewModel.flip()
+        cardPileViewModel.push(cardViewModel)
+    }
+
+    /* Shake Motion */
+    func reset() {
+        cardGame.reset()
+        cardStacksViewModel.replace(cardStacks: cardGame.cardStacks)
+        moveCardViewModelsToCardDeckViewModel()
+        cardDeckViewModel.replace(cardDeck: cardGame.cardDeck)
     }
 
 }
