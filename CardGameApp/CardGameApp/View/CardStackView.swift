@@ -54,6 +54,13 @@ class CardStackView: UIView {
         NotificationCenter.default.post(name: .cardDidDoubleTapped, object: self, userInfo: userInfo)
     }
 
+    func pop(indexOfCard: Int) -> CardView? {
+        guard subviews.indices.contains(indexOfCard) else { return nil }
+        guard let cardView = subviews[indexOfCard] as? CardView else { return nil }
+        cardView.removeFromSuperview()
+        return cardView
+    }
+
 }
 
 extension Notification.Name {

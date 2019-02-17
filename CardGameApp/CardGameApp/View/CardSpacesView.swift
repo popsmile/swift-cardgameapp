@@ -33,8 +33,15 @@ class CardSpacesView: UIStackView {
     private func createCardSpaceViews(spaces: Int) {
         for _ in 0..<spaces {
             let cardSpaceView = CardSpaceView(frame: .zero)
+            cardSpaceView.frame.size = CardViewLayout.size
             addArrangedSubview(cardSpaceView)
         }
+    }
+
+    func push(_ cardView: CardView, at indexOfSpace: Int) {
+        guard subviews.indices.contains(indexOfSpace) else { return }
+        guard let cardSpaceView = subviews[indexOfSpace] as? CardSpaceView else { return }
+        cardSpaceView.push(cardView)
     }
 
 }

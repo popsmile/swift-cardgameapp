@@ -40,4 +40,8 @@ class CardSpaceView: UIView {
         layer.masksToBounds = true
     }
 
+    func push(_ cardView: CardView) {
+        addSubview(cardView)
+    }
+
 }

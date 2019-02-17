@@ -41,6 +41,12 @@ class ViewController: UIViewController {
 
     @objc private func handleDoubleTap(_ notification: Notification) {
         print("더블탭: \(notification.userInfo!)")
+        guard let indexOfCard = notification.userInfo?[Notification.InfoKey.indexOfCard] as? Int,
+              let indexOfCardStack = notification.userInfo?[Notification.InfoKey.indexOfCardStack] as? Int else { return }
+        
+        if let space = cardGameViewModel.moveToSpace(indexOfCard: indexOfCard, indexOfCardStack: indexOfCardStack) {
+            cardGameView.move(indexOfCard: indexOfCard, indexOfCardStack: indexOfCardStack, to: space)
+        }
     }
 
     @objc private func handleTap(_ notification: Notification) {

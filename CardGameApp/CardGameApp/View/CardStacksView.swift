@@ -38,4 +38,10 @@ class CardStacksView: UIStackView {
         }
     }
 
+    func pop(indexOfCard: Int, indexOfCardStack: Int) -> CardView? {
+        guard subviews.indices.contains(indexOfCardStack) else { return nil }
+        guard let cardStackView = subviews[indexOfCardStack] as? CardStackView else { return nil }
+        return cardStackView.pop(indexOfCard: indexOfCard)
+    }
+
 }

@@ -60,6 +60,12 @@ extension CardGameView {
         cardPileView.push(cardView)
     }
 
+    /* Double Tap */
+    func move(indexOfCard: Int, indexOfCardStack: Int, to indexOfSpace: Int) {
+        guard let cardView = cardStacksView.pop(indexOfCard: indexOfCard, indexOfCardStack: indexOfCardStack) else { return }
+        cardSpacesView.push(cardView, at: indexOfSpace)
+    }
+
     /* Shake Motion */
     func reset() {
         moveCardViewsToCardDeckView()
