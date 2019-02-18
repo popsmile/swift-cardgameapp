@@ -23,9 +23,14 @@ class CardSpacesViewModel {
         }
     }
 
-    func push(cardViewModel card: CardViewModel) -> Int? {
+    func push(cardViewModel: CardViewModel, at index: Int) {
+        guard cardSpaceViewModels.indices.contains(index) else { return }
+        cardSpaceViewModels[index].push(cardViewModel: cardViewModel)
+    }
+
+    func canPush(cardViewModel card: CardViewModel) -> Int? {
         for (index, cardSpace) in cardSpaceViewModels.enumerated() {
-            if cardSpace.push(cardViewModel: card) { return index }
+            if cardSpace.canPush(cardViewModel: card) { return index }
         }
         return nil
     }

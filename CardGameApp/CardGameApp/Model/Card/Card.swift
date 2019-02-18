@@ -25,6 +25,10 @@ class Card: CustomStringConvertible {
         return rank == .A
     }
 
+    var isHighest: Bool {
+        return rank == .K
+    }
+
     func hasSameSuit(with card: Card) -> Bool {
         return self.suit == card.suit
     }

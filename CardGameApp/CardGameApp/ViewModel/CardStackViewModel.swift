@@ -45,6 +45,18 @@ class CardStackViewModel {
         }
     }
 
+    func push(cardViewModel: CardViewModel) {
+        cardViewModels.append(cardViewModel)
+    }
+
+    func canPush(cardViewModel card: CardViewModel) -> Bool {
+        if cardViewModels.isEmpty && card.isHighest { return true }
+        guard let lastCard = cardViewModels.last else { return false }
+        if card.hasSameColor(with: lastCard) { return false }
+        if card.isNextLower(than: lastCard) { return true }
+        return false
+    }
+
 }
 
 extension CardStackViewModel {
@@ -61,10 +73,15 @@ extension CardStackViewModel {
         return deliver(cardViewModels[index])
     }
 
-    func removeCardViewModel(at index: Int) {
-        guard cardViewModels.indices.contains(index) else { return }
-        cardViewModels.remove(at: index)
+    func removeCardViewModels(from index: Int, toTheEnd: Bool = true) -> [CardViewModel]? {
+        guard cardViewModels.indices.contains(index) else { return nil }
+        var removed = [CardViewModel]()
+        let lastIndex = toTheEnd ? cardViewModels.count : index + 1
+        for _ in index..<lastIndex {
+            removed.append(cardViewModels.removeLast())
+        }
         flipLastCard()
+        return removed
     }
 
 }

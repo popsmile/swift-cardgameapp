@@ -48,14 +48,35 @@ extension CardStacksViewModel {
         }
     }
 
-    func accessCardViewModel(at indexOfCard: Int, of indexOfcardStack: Int, _ deliver: (CardViewModel) -> Int?) -> Int? {
-        guard cardStackViewModels.indices.contains(indexOfcardStack) else { return nil }
-        return cardStackViewModels[indexOfcardStack].accessCardViewModel(at: indexOfCard, by: deliver)
+    func accessCardViewModel(at indexOfCard: Int, of indexOfCardStack: Int, _ deliver: (CardViewModel) -> Int?) -> Int? {
+        guard cardStackViewModels.indices.contains(indexOfCardStack) else { return nil }
+        return cardStackViewModels[indexOfCardStack].accessCardViewModel(at: indexOfCard, by: deliver)
     }
 
-    func removeCardViewModel(at indexOfCard: Int, of indexOfcardStack: Int) {
-        guard cardStackViewModels.indices.contains(indexOfcardStack) else { return }
-        cardStackViewModels[indexOfcardStack].removeCardViewModel(at: indexOfCard)
+    func removeCardViewModels(from indexOfCard: Int, of indexOfcardStack: Int, toTheEnd: Bool = true) -> [CardViewModel]? {
+        guard cardStackViewModels.indices.contains(indexOfcardStack) else { return nil }
+        return cardStackViewModels[indexOfcardStack].removeCardViewModels(from: indexOfCard, toTheEnd: toTheEnd)
+    }
+
+    private func canPush(cardViewModel card: CardViewModel) -> Int? {
+        for (index, cardStack) in cardStackViewModels.enumerated() {
+            if cardStack.canPush(cardViewModel: card) { return index }
+        }
+        return nil
+    }
+
+    func moveCardViewModel(at indexOfCard: Int, of indexOfCardStack: Int) -> Int? {
+        guard cardStackViewModels.indices.contains(indexOfCardStack) else { return nil }
+        let cardStack = cardStackViewModels[indexOfCardStack]
+        let location = cardStack.accessCardViewModel(at: indexOfCard) {
+            [unowned self] cardViewModel in self.canPush(cardViewModel: cardViewModel)
+        }
+        if let location = location {
+            let cardViewModels = cardStack.removeCardViewModels(from: indexOfCard)
+            cardViewModels?.forEach { cardStack.push(cardViewModel: $0) }
+            return location
+        }
+        return nil
     }
 
 }

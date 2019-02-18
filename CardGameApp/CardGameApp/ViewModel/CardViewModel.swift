@@ -37,6 +37,10 @@ class CardViewModel {
         return card.isLowest
     }
 
+    var isHighest: Bool {
+        return card.isHighest
+    }
+
     func hasSameSuit(with cardViewModel: CardViewModel) -> Bool {
         return card.hasSameSuit(with: cardViewModel.card)
     }
