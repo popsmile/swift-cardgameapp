@@ -37,7 +37,7 @@ class ViewController: UIViewController {
     private func registerAsObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(handleTapOfCardInDeck),
                                                name: .cardInDeckDidTapped, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleTouchOfrefreshImageInDeck),
+        NotificationCenter.default.addObserver(self, selector: #selector(handleTouchOfRefreshImageInDeck),
                                                name: .refreshImageInDeckDidTapped, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleDoubleTapOfCardStacks(_:)),
                                                name: .cardDidDoubleTapped, object: nil)
@@ -50,9 +50,9 @@ class ViewController: UIViewController {
         cardGameView.moveCardViewFromCardDeckView()
     }
 
-    @objc private func handleTouchOfrefreshImageInDeck() {
-        cardGameView.reset()
+    @objc private func handleTouchOfRefreshImageInDeck() {
         cardGameViewModel.moveCardViewModelsToCardDeckViewModel()
+        cardGameView.moveCardViewsToCardDeckView()
     }
 
     @objc private func handleDoubleTapOfCardStacks(_ notification: Notification) {

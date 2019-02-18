@@ -85,7 +85,7 @@ extension CardGameView {
         moveCardViewsToCardDeckView()
     }
 
-    private func moveCardViewsToCardDeckView() {
+    func moveCardViewsToCardDeckView() {
         while !cardPileView.subviews.isEmpty {
             guard let cardView = cardPileView.pop() else { break }
             cardDeckView.push(cardView)
