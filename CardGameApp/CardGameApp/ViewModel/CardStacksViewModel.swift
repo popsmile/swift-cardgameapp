@@ -73,7 +73,7 @@ extension CardStacksViewModel {
         }
         if let location = location {
             let cardViewModels = cardStack.removeCardViewModels(from: indexOfCard)
-            cardViewModels?.forEach { cardStack.push(cardViewModel: $0) }
+            cardViewModels?.forEach { cardStackViewModels[location].push(cardViewModel: $0) }
             return location
         }
         return nil
