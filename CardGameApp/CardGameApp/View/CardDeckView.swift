@@ -41,9 +41,14 @@ class CardDeckView: UIImageView {
         image = UIImage(named: "cardgameapp-refresh-app")
     }
 
-    private func addTapGestureRecognizer(to view: CardView) {
+    private func addTapGestureRecognizer(to cardView: CardView) {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        view.addGestureRecognizer(tapGestureRecognizer)
+        cardView.addGestureRecognizer(tapGestureRecognizer)
+    }
+
+    private func removeTapGestureRecognizer(from cardView: CardView) {
+        guard let tapGestureRecognizer = cardView.gestureRecognizers?.first else { return }
+        cardView.removeGestureRecognizer(tapGestureRecognizer)
     }
 
     @objc private func handleTap() {
@@ -57,6 +62,7 @@ class CardDeckView: UIImageView {
 
     func pop() -> CardView? {
         guard let cardView = subviews.last as? CardView else { return nil }
+        removeTapGestureRecognizer(from: cardView)
         cardView.removeFromSuperview()
         return cardView
     }
