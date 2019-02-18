@@ -45,4 +45,20 @@ class CardSpaceView: UIView {
         addSubview(cardView)
     }
 
+    private func pop() -> CardView? {
+        guard let cardView = subviews.last as? CardView else { return nil }
+        cardView.removeFromSuperview()
+        return cardView
+    }
+
+    func popAll() -> [CardView]? {
+        if subviews.isEmpty { return nil }
+        var cardViews = [CardView]()
+        while !subviews.isEmpty {
+            guard let cardView = pop() else { continue }
+            cardViews.append(cardView)
+        }
+        return cardViews
+    }
+
 }

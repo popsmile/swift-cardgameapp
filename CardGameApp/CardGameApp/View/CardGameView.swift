@@ -83,6 +83,13 @@ extension CardGameView {
     /* Shake Motion */
     func reset() {
         moveCardViewsToCardDeckView()
+        if let cardViewsRemained = cardStacksView.rearrangeCardViews() {
+            cardViewsRemained.forEach { cardDeckView.push($0) }
+        }
+        guard let cardViews = cardSpacesView.popAll() else { return }
+        if let cardViewsRemained = cardStacksView.fillCardStackViews(with: cardViews) {
+            cardViewsRemained.forEach { cardDeckView.push($0) }
+        }
     }
 
     func moveCardViewsToCardDeckView() {

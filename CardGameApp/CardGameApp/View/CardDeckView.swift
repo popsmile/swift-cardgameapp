@@ -66,6 +66,7 @@ class CardDeckView: UIImageView {
     }
 
     func push(_ cardView: CardView) {
+        cardView.frame.origin = .zero
         addSubview(cardView)
         addTapGestureRecognizer(to: cardView)
     }

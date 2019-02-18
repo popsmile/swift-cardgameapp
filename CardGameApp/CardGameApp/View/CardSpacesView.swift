@@ -44,4 +44,15 @@ class CardSpacesView: UIStackView {
         cardSpaceView.push(cardView)
     }
 
+    func popAll() -> [CardView]? {
+        if subviews.isEmpty { return nil }
+        var cardViews = [CardView]()
+        for view in subviews {
+            guard let cardSpaceView = view as? CardSpaceView else { continue }
+            guard let cardViewsRemoved = cardSpaceView.popAll() else { continue }
+            cardViewsRemoved.forEach { cardViews.append($0) }
+        }
+        return cardViews
+    }
+
 }

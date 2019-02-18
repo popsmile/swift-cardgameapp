@@ -61,3 +61,42 @@ class CardStacksView: UIStackView {
     }
 
 }
+
+/* MARK: User interaction events */
+extension CardStacksView {
+
+    /* Shake Motion */
+    func rearrangeCardViews() -> [CardView]? {
+        guard let cardViews = cutCardViewsOutOfRange() else { return nil }
+        let cardViewsRemained = fillCardStackViews(with: cardViews)
+        return cardViewsRemained
+    }
+
+    private func cutCardViewsOutOfRange() -> [CardView]? {
+        var cardViewsPopped = [CardView]()
+        for (index, view) in subviews.enumerated() {
+            let maxCount = index + 1
+            guard let cardStackView = view as? CardStackView else { continue }
+            guard let cardViews = cardStackView.pop(from: maxCount) else { continue }
+            cardViews.forEach { cardViewsPopped.append($0) }
+        }
+        return cardViewsPopped.isEmpty ? nil : cardViewsPopped
+    }
+
+    func fillCardStackViews(with cardViews: [CardView]) -> [CardView]? {
+        var cardViews = cardViews
+        for (index, view) in subviews.enumerated() {
+            let maxCount = index + 1
+            guard let cardStackView = view as? CardStackView else { continue }
+            guard cardStackView.subviews.count < maxCount else { continue }
+            
+            for _ in cardStackView.subviews.count..<maxCount {
+                if cardViews.isEmpty { return nil }
+                let cardView = cardViews.removeLast()
+                cardStackView.push(cardView: cardView)
+            }
+        }
+        return cardViews.isEmpty ? nil : cardViews
+    }
+
+}
