@@ -66,8 +66,18 @@ extension CardGameView {
         cardSpacesView.push(cardView, at: indexOfSpace)
     }
 
+    func moveCardFromPileToSpace(at indexOfSpace: Int) {
+        guard let cardView = cardPileView.pop() else { return }
+        cardSpacesView.push(cardView, at: indexOfSpace)
+    }
+
     func moveToStack(indexOfCard: Int, indexOfCardStack: Int, to indexOfCardStackToMove: Int) {
         cardStacksView.moveCardView(indexOfCard: indexOfCard, indexOfCardStack: indexOfCardStack, to: indexOfCardStackToMove)
+    }
+
+    func moveCardFromPileToStack(at indexOfStack: Int) {
+        guard let cardView = cardPileView.pop() else { return }
+        cardStacksView.push(cardView, at: indexOfStack)
     }
 
     /* Shake Motion */
