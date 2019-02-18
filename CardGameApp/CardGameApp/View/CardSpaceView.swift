@@ -41,6 +41,7 @@ class CardSpaceView: UIView {
     }
 
     func push(_ cardView: CardView) {
+        cardView.frame.origin = .zero
         addSubview(cardView)
     }
 
