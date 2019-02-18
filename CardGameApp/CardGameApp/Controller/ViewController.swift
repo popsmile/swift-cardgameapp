@@ -45,7 +45,11 @@ class ViewController: UIViewController {
               let indexOfCardStack = notification.userInfo?[Notification.InfoKey.indexOfCardStack] as? Int else { return }
         
         if let space = cardGameViewModel.moveToSpace(indexOfCard: indexOfCard, indexOfCardStack: indexOfCardStack) {
-            cardGameView.move(indexOfCard: indexOfCard, indexOfCardStack: indexOfCardStack, to: space)
+            cardGameView.moveToSpace(indexOfCard: indexOfCard, indexOfCardStack: indexOfCardStack, to: space)
+        }
+        
+        if let stack = cardGameViewModel.moveToStack(indexOfCard: indexOfCard, indexOfCardStack: indexOfCardStack) {
+            cardGameView.moveToStack(indexOfCard: indexOfCard, indexOfCardStack: indexOfCardStack, to: stack)
         }
     }
 

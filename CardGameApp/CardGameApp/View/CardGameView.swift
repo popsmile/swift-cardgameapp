@@ -61,9 +61,13 @@ extension CardGameView {
     }
 
     /* Double Tap */
-    func move(indexOfCard: Int, indexOfCardStack: Int, to indexOfSpace: Int) {
+    func moveToSpace(indexOfCard: Int, indexOfCardStack: Int, to indexOfSpace: Int) {
         guard let cardView = cardStacksView.pop(indexOfCard: indexOfCard, indexOfCardStack: indexOfCardStack) else { return }
         cardSpacesView.push(cardView, at: indexOfSpace)
+    }
+
+    func moveToStack(indexOfCard: Int, indexOfCardStack: Int, to indexOfCardStackToMove: Int) {
+        cardStacksView.moveCardView(indexOfCard: indexOfCard, indexOfCardStack: indexOfCardStack, to: indexOfCardStackToMove)
     }
 
     /* Shake Motion */

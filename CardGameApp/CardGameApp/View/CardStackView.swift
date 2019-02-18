@@ -54,11 +54,33 @@ class CardStackView: UIView {
         NotificationCenter.default.post(name: .cardDidDoubleTapped, object: self, userInfo: userInfo)
     }
 
-    func pop(indexOfCard: Int) -> CardView? {
+    func pop(at indexOfCard: Int) -> CardView? {
         guard subviews.indices.contains(indexOfCard) else { return nil }
         guard let cardView = subviews[indexOfCard] as? CardView else { return nil }
         cardView.removeFromSuperview()
         return cardView
+    }
+
+    func pop(from indexOfCard: Int) -> [CardView]? {
+        guard subviews.indices.contains(indexOfCard) else { return nil }
+        let views = subviews[indexOfCard...]
+        var cardViewsPopped = [CardView]()
+        for view in views {
+            guard let cardView = view as? CardView else { continue }
+            cardView.removeFromSuperview()
+            cardViewsPopped.append(cardView)
+        }
+        return cardViewsPopped
+    }
+
+    func push(cardView: CardView) {
+        if subviews.isEmpty {
+            cardView.frame.origin = .zero
+        }
+        if let lastCardView = subviews.last {
+            cardView.frame.origin.y = lastCardView.frame.origin.y + 20
+        }
+        addSubview(cardView)
     }
 
 }
