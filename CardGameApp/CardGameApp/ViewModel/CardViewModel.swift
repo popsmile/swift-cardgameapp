@@ -27,6 +27,18 @@ class CardViewModel {
         NotificationCenter.default.post(name: .cardDidFlip, object: self, userInfo: userInfo)
     }
 
+    func open() {
+        if !opened {
+            flip()
+        }
+    }
+
+    func close() {
+        if opened {
+            flip()
+        }
+    }
+
     func replace(card: Card) {
         self.card = card
         let userInfo = [Notification.InfoKey.imageNameOfCard: imageName]

@@ -33,9 +33,14 @@ class CardStackViewModel {
         }
     }
 
+    var count: Int {
+        return cardViewModels.count
+    }
+
     func replace(cardStack: CardStack) {
         self.cardStack = cardStack
         replaceCardViewModels()
+        closeCardsExceptLastCard()
     }
 
     private func replaceCardViewModels() {
@@ -44,6 +49,11 @@ class CardStackViewModel {
                 self.cardViewModels[index].replace(card: card)
             }
         }
+    }
+
+    private func closeCardsExceptLastCard() {
+        cardViewModels.forEach { $0.close() }
+        flipLastCard()
     }
 
     func canPush(_ cardViewModel: CardViewModel) -> Bool {

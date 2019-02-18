@@ -86,3 +86,39 @@ extension CardStacksViewModel {
     }
 
 }
+
+/* MARK: User interaction events */
+extension CardStacksViewModel {
+
+    func rearrangeCardViewModels() -> [CardViewModel]? {
+        guard let cardViewModels = cutCardViewModelsOutOfRange() else { return nil }
+        let cardViewModelsRemained = fillCardStackViewModels(with: cardViewModels)
+        return cardViewModelsRemained
+    }
+
+    private func cutCardViewModelsOutOfRange() -> [CardViewModel]? {
+        var cardViewModelsPopped = [CardViewModel]()
+        for (index, cardStackViewModel) in cardStackViewModels.enumerated() {
+            let maxCount = index + 1
+            guard let cardViewModels = cardStackViewModel.pop(from: maxCount) else { continue }
+            cardViewModels.forEach { cardViewModelsPopped.append($0) }
+        }
+        return cardViewModelsPopped.isEmpty ? nil : cardViewModelsPopped
+    }
+
+    func fillCardStackViewModels(with cardViewModels: [CardViewModel]) -> [CardViewModel]? {
+        var cardViewModels = cardViewModels
+        for (index, cardStackViewModel) in cardStackViewModels.enumerated() {
+            let maxCount = index + 1
+            guard cardStackViewModel.count < maxCount else { continue }
+            
+            for _ in cardStackViewModel.count..<maxCount {
+                if cardViewModels.isEmpty { return nil }
+                let cardViewModel = cardViewModels.removeLast()
+                cardStackViewModel.push(cardViewModel)
+            }
+        }
+        return cardViewModels.isEmpty ? nil : cardViewModels
+    }
+
+}

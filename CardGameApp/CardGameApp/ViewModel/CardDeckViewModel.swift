@@ -29,6 +29,7 @@ class CardDeckViewModel {
     func replace(cardDeck: CardDeck) {
         self.cardDeck = cardDeck
         replaceCardViewModels()
+        closeCards()
     }
 
     private func replaceCardViewModels() {
@@ -36,6 +37,10 @@ class CardDeckViewModel {
             guard let card = cardDeck.removeOne() else { return }
             cardViewModel.replace(card: card)
         }
+    }
+
+    private func closeCards() {
+        cardViewModels.forEach { $0.close() }
     }
 
     func push(_ cardViewModel: CardViewModel) {

@@ -79,9 +79,20 @@ extension CardGameViewModel {
 
     /* Shake Motion */
     func reset() {
+        moveCardViewModelsToCardDeckViewModel()
+        if let cardViewModelsRemained = cardStacksViewModel.rearrangeCardViewModels() {
+            cardViewModelsRemained.forEach { cardDeckViewModel.push($0) }
+        }
+        guard let cardViewModels = cardSpacesViewModel.popAll() else { return }
+        if let cardViewModelsRemained = cardStacksViewModel.fillCardStackViewModels(with: cardViewModels) {
+            cardViewModelsRemained.forEach { cardDeckViewModel.push($0) }
+        }
+        replaceViewModelsByNewGame()
+    }
+
+    private func replaceViewModelsByNewGame() {
         cardGame.reset()
         cardStacksViewModel.replace(cardStacks: cardGame.cardStacks)
-        moveCardViewModelsToCardDeckViewModel()
         cardDeckViewModel.replace(cardDeck: cardGame.cardDeck)
     }
 

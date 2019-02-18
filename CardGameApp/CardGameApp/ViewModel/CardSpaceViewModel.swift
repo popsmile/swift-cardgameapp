@@ -27,4 +27,19 @@ class CardSpaceViewModel {
         return false
     }
 
+    private func pop() -> CardViewModel? {
+        if cardViewModels.isEmpty { return nil }
+        return cardViewModels.removeLast()
+    }
+
+    func popAll() -> [CardViewModel]? {
+        if cardViewModels.isEmpty { return nil }
+        var cardViewModelsRemoved = [CardViewModel]()
+        while !cardViewModels.isEmpty {
+            guard let cardViewModel = pop() else { continue }
+            cardViewModelsRemoved.append(cardViewModel)
+        }
+        return cardViewModelsRemoved
+    }
+
 }

@@ -35,4 +35,13 @@ class CardSpacesViewModel {
         return nil
     }
 
+    func popAll() -> [CardViewModel]? {
+        var cardViewModels = [CardViewModel]()
+        for cardSpaceViewModel in cardSpaceViewModels {
+            guard let cardViewModelsRemoved = cardSpaceViewModel.popAll() else { continue }
+            cardViewModelsRemoved.forEach { cardViewModels.append($0) }
+        }
+        return cardViewModels.isEmpty ? nil : cardViewModels
+    }
+
 }
