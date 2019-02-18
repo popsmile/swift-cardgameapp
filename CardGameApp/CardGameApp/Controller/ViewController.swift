@@ -37,19 +37,26 @@ class ViewController: UIViewController {
     private func registerAsObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(handleDoubleTap(_:)), name: .cardDidDoubleTapped, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleTap(_:)), name: .cardDeckDidTapped, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleDoubleTapOfCardPile), name: .cardPileDidDoubleTapped, object: nil)
     }
 
     @objc private func handleDoubleTap(_ notification: Notification) {
-        print("더블탭: \(notification.userInfo!)")
         guard let indexOfCard = notification.userInfo?[Notification.InfoKey.indexOfCard] as? Int,
               let indexOfCardStack = notification.userInfo?[Notification.InfoKey.indexOfCardStack] as? Int else { return }
-        
         if let space = cardGameViewModel.moveToSpace(indexOfCard: indexOfCard, indexOfCardStack: indexOfCardStack) {
             cardGameView.moveToSpace(indexOfCard: indexOfCard, indexOfCardStack: indexOfCardStack, to: space)
         }
-        
         if let stack = cardGameViewModel.moveToStack(indexOfCard: indexOfCard, indexOfCardStack: indexOfCardStack) {
             cardGameView.moveToStack(indexOfCard: indexOfCard, indexOfCardStack: indexOfCardStack, to: stack)
+        }
+    }
+
+    @objc private func handleDoubleTapOfCardPile() {
+        if let space = cardGameViewModel.moveCardFromPileToSpace() {
+            cardGameView.moveCardFromPileToSpace(at: space)
+        }
+        if let stack = cardGameViewModel.moveCardFromPileToStack() {
+            cardGameView.moveCardFromPileToStack(at: stack)
         }
     }
 
