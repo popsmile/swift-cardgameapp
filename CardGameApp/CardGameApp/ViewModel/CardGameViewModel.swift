@@ -38,10 +38,14 @@ extension CardGameViewModel {
 
     /* Double Tap */
     func moveToSpace(indexOfCard: Int, indexOfCardStack: Int) -> Int? {
-        let location = cardStacksViewModel.accessCardViewModel(at: indexOfCard, of: indexOfCardStack) {
+        let space = cardStacksViewModel.accessCardViewModel(at: indexOfCard, of: indexOfCardStack) {
             [unowned self] cardViewModel in self.cardSpacesViewModel.push(cardViewModel: cardViewModel)
         }
-        return location
+        if let location = space {
+            cardStacksViewModel.removeCardViewModel(at: indexOfCard, of: indexOfCardStack)
+            return location
+        }
+        return nil
     }
 
     func moveToStacks(indexOfCard: Int, indexOfCardStack: Int) -> Int {

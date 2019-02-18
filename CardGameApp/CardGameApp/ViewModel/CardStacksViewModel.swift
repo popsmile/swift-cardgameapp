@@ -53,4 +53,9 @@ extension CardStacksViewModel {
         return cardStackViewModels[indexOfcardStack].accessCardViewModel(at: indexOfCard, by: deliver)
     }
 
+    func removeCardViewModel(at indexOfCard: Int, of indexOfcardStack: Int) {
+        guard cardStackViewModels.indices.contains(indexOfcardStack) else { return }
+        cardStackViewModels[indexOfcardStack].removeCardViewModel(at: indexOfCard)
+    }
+
 }
