@@ -21,7 +21,9 @@ class CardStackView: UIView {
     convenience init(frame: CGRect, viewModel: CardStackViewModel) {
         self.init(frame: frame)
         createCardViews(with: viewModel)
-        addDoubleTapGestureRecognizer()
+        if let cardViews = subviews as? [CardView] {
+            cardViews.forEach { addDoubleTapGestureRecognizer(to: $0) }
+        }
     }
 
     private func createCardViews(with viewModel: CardStackViewModel) {
@@ -35,11 +37,14 @@ class CardStackView: UIView {
         }
     }
 
-    private func addDoubleTapGestureRecognizer() {
-        for cardView in subviews {
-            let doubleTapGestureRecognizer = DoubleTapGestureRecognizer(target: self, action: #selector(handleDoubleTapGesture(sender:)))
-            cardView.addGestureRecognizer(doubleTapGestureRecognizer)
-        }
+    private func addDoubleTapGestureRecognizer(to cardView: CardView) {
+        let doubleTapGestureRecognizer = DoubleTapGestureRecognizer(target: self, action: #selector(handleDoubleTapGesture(sender:)))
+        cardView.addGestureRecognizer(doubleTapGestureRecognizer)
+    }
+
+    private func removeDoubleTapGestureRecognizer(from cardView: CardView) {
+        guard let douebleTapGestureRecognizer = cardView.gestureRecognizers?.first else { return }
+        cardView.removeGestureRecognizer(douebleTapGestureRecognizer)
     }
 
     @objc private func handleDoubleTapGesture(sender: DoubleTapGestureRecognizer) {
@@ -57,6 +62,7 @@ class CardStackView: UIView {
     func pop(at indexOfCard: Int) -> CardView? {
         guard subviews.indices.contains(indexOfCard) else { return nil }
         guard let cardView = subviews[indexOfCard] as? CardView else { return nil }
+        removeDoubleTapGestureRecognizer(from: cardView)
         cardView.removeFromSuperview()
         return cardView
     }
@@ -67,6 +73,7 @@ class CardStackView: UIView {
         var cardViewsPopped = [CardView]()
         for view in views {
             guard let cardView = view as? CardView else { continue }
+            removeDoubleTapGestureRecognizer(from: cardView)
             cardView.removeFromSuperview()
             cardViewsPopped.append(cardView)
         }
@@ -81,6 +88,7 @@ class CardStackView: UIView {
             cardView.frame.origin.y = lastCardView.frame.origin.y + 20
         }
         addSubview(cardView)
+        addDoubleTapGestureRecognizer(to: cardView)
     }
 
 }
