@@ -35,12 +35,24 @@ class ViewController: UIViewController {
     }
 
     private func registerAsObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleTapOfCardInDeck),
+                                               name: .cardInDeckDidTapped, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleTouchOfrefreshImageInDeck),
+                                               name: .refreshImageInDeckDidTapped, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleDoubleTapOfCardStacks(_:)),
                                                name: .cardDidDoubleTapped, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleTap(_:)),
-                                               name: .cardDeckDidTapped, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleDoubleTapOfCardPile),
                                                name: .cardPileDidDoubleTapped, object: nil)
+    }
+
+    @objc private func handleTapOfCardInDeck() {
+        cardGameViewModel.openCardFromCardDeck()
+        cardGameView.moveCardViewFromCardDeckView()
+    }
+
+    @objc private func handleTouchOfrefreshImageInDeck() {
+        cardGameView.reset()
+        cardGameViewModel.moveCardViewModelsToCardDeckViewModel()
     }
 
     @objc private func handleDoubleTapOfCardStacks(_ notification: Notification) {
@@ -60,11 +72,6 @@ class ViewController: UIViewController {
         if let stack = cardGameViewModel.moveCardFromPileToStack() {
             cardGameView.moveCardFromPileToStack(at: stack)
         }
-    }
-
-    @objc private func handleTap(_ notification: Notification) {
-        cardGameViewModel.openCardFromCardDeck()
-        cardGameView.moveCardViewFromCardDeckView()
     }
 
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {

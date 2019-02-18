@@ -24,6 +24,7 @@ class CardDeckView: UIImageView {
         self.init(frame: frame)
         createCardViews(with: viewModel)
         registerAsObserver(of: viewModel)
+        setTapGestureRecognizer()
     }
 
     private func createCardViews(with viewModel: CardDeckViewModel) {
@@ -41,8 +42,17 @@ class CardDeckView: UIImageView {
         image = UIImage(named: "cardgameapp-refresh-app")
     }
 
+    private func setTapGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapOfRefreshImage))
+        self.addGestureRecognizer(tapGestureRecognizer)
+    }
+
+    @objc private func handleTapOfRefreshImage() {
+        NotificationCenter.default.post(name: .refreshImageInDeckDidTapped, object: self)
+    }
+
     private func addTapGestureRecognizer(to cardView: CardView) {
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapOfCardView))
         cardView.addGestureRecognizer(tapGestureRecognizer)
     }
 
@@ -51,8 +61,8 @@ class CardDeckView: UIImageView {
         cardView.removeGestureRecognizer(tapGestureRecognizer)
     }
 
-    @objc private func handleTap() {
-        NotificationCenter.default.post(name: .cardDeckDidTapped, object: self)
+    @objc private func handleTapOfCardView() {
+        NotificationCenter.default.post(name: .cardInDeckDidTapped, object: self)
     }
 
     func push(_ cardView: CardView) {
@@ -70,5 +80,6 @@ class CardDeckView: UIImageView {
 }
 
 extension Notification.Name {
-    static let cardDeckDidTapped = NSNotification.Name("cardDeckDidTapped")
+    static let cardInDeckDidTapped = NSNotification.Name("cardDeckDidTapped")
+    static let refreshImageInDeckDidTapped = Notification.Name("refreshImageInDeckDidTapped")
 }

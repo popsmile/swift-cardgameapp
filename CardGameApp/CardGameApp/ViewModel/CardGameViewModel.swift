@@ -85,7 +85,7 @@ extension CardGameViewModel {
         cardDeckViewModel.replace(cardDeck: cardGame.cardDeck)
     }
 
-    private func moveCardViewModelsToCardDeckViewModel() {
+    func moveCardViewModelsToCardDeckViewModel() {
         while !cardPileViewModel.isEmpty {
             guard let cardViewModel = cardPileViewModel.pop() else { return }
             cardViewModel.flip()
