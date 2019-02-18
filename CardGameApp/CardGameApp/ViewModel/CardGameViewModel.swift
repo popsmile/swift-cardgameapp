@@ -37,41 +37,41 @@ extension CardGameViewModel {
     }
 
     /* Double Tap */
-    func moveToSpace(indexOfCard: Int, indexOfCardStack: Int) -> Int? {
-        let space = cardStacksViewModel.accessCardViewModel(at: indexOfCard, of: indexOfCardStack) {
-            [unowned self] cardViewModel in self.cardSpacesViewModel.canPush(cardViewModel: cardViewModel)
+    func moveCardFromStackToSpace(cardAt indexPath: IndexPath) -> Int? {
+        let space = cardStacksViewModel.accessCardViewModel(at: indexPath) {
+            [unowned self] cardViewModel in self.cardSpacesViewModel.canPush(cardViewModel)
         }
         if let location = space {
-            let cardViewModels = cardStacksViewModel.removeCardViewModels(from: indexOfCard, of: indexOfCardStack, toTheEnd: false)
-            cardViewModels?.forEach { cardSpacesViewModel.push(cardViewModel: $0, at: location) }
+            let cardViewModels = cardStacksViewModel.removeCardViewModels(from: indexPath, toTheEnd: false)
+            cardViewModels?.forEach { cardSpacesViewModel.push($0, at: location)}
             return location
         }
         return nil
+    }
+
+    func moveCardFromStackToStack(cardAt indexPath: IndexPath) -> Int? {
+        return cardStacksViewModel.moveCardViewModel(at: indexPath)
     }
 
     func moveCardFromPileToSpace() -> Int? {
         let space = cardPileViewModel.accessCardViewModel {
-            [unowned self] cardViewModel in self.cardSpacesViewModel.canPush(cardViewModel: cardViewModel)
+            [unowned self] cardViewModel in self.cardSpacesViewModel.canPush(cardViewModel)
         }
         if let location = space {
             guard let cardViewModel = cardPileViewModel.pop() else { return nil }
-            cardSpacesViewModel.push(cardViewModel: cardViewModel, at: location)
+            cardSpacesViewModel.push(cardViewModel, at: location)
             return location
         }
         return nil
     }
 
-    func moveToStack(indexOfCard: Int, indexOfCardStack: Int) -> Int? {
-        return cardStacksViewModel.moveCardViewModel(at: indexOfCard, of: indexOfCardStack)
-    }
-
     func moveCardFromPileToStack() -> Int? {
         let stack = cardPileViewModel.accessCardViewModel {
-            [unowned self] cardViewModel in self.cardStacksViewModel.canPush(cardViewModel: cardViewModel)
+            [unowned self] cardViewModel in self.cardStacksViewModel.canPush(cardViewModel)
         }
         if let location = stack {
             guard let cardViewModel = cardPileViewModel.pop() else { return nil }
-            cardStacksViewModel.push(cardViewModel: cardViewModel, at: location)
+            cardStacksViewModel.push(cardViewModel, at: location)
             return location
         }
         return nil

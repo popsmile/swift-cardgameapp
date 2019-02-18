@@ -48,37 +48,37 @@ extension CardStacksViewModel {
         }
     }
 
-    func accessCardViewModel(at indexOfCard: Int, of indexOfCardStack: Int, _ deliver: (CardViewModel) -> Int?) -> Int? {
-        guard cardStackViewModels.indices.contains(indexOfCardStack) else { return nil }
-        return cardStackViewModels[indexOfCardStack].accessCardViewModel(at: indexOfCard, by: deliver)
+    func accessCardViewModel(at indexPath: IndexPath, _ deliver: (CardViewModel) -> Int?) -> Int? {
+        guard cardStackViewModels.indices.contains(indexPath.section) else { return nil }
+        return cardStackViewModels[indexPath.section].accessCardViewModel(at: indexPath.item, by: deliver)
     }
 
-    func removeCardViewModels(from indexOfCard: Int, of indexOfcardStack: Int, toTheEnd: Bool = true) -> [CardViewModel]? {
-        guard cardStackViewModels.indices.contains(indexOfcardStack) else { return nil }
-        return cardStackViewModels[indexOfcardStack].removeCardViewModels(from: indexOfCard, toTheEnd: toTheEnd)
+    func removeCardViewModels(from indexPath: IndexPath, toTheEnd: Bool = true) -> [CardViewModel]? {
+        guard cardStackViewModels.indices.contains(indexPath.section) else { return nil }
+        return cardStackViewModels[indexPath.section].removeCardViewModels(from: indexPath.item, toTheEnd: toTheEnd)
     }
 
-    func canPush(cardViewModel card: CardViewModel) -> Int? {
+    func canPush(_ cardViewModel: CardViewModel) -> Int? {
         for (index, cardStack) in cardStackViewModels.enumerated() {
-            if cardStack.canPush(cardViewModel: card) { return index }
+            if cardStack.canPush(cardViewModel) { return index }
         }
         return nil
     }
 
-    func push(cardViewModel: CardViewModel, at indexOfCardStack: Int) {
+    func push(_ cardViewModel: CardViewModel, at indexOfCardStack: Int) {
         guard cardStackViewModels.indices.contains(indexOfCardStack) else { return }
-        cardStackViewModels[indexOfCardStack].push(cardViewModel: cardViewModel)
+        cardStackViewModels[indexOfCardStack].push(cardViewModel)
     }
 
-    func moveCardViewModel(at indexOfCard: Int, of indexOfCardStack: Int) -> Int? {
-        guard cardStackViewModels.indices.contains(indexOfCardStack) else { return nil }
-        let cardStack = cardStackViewModels[indexOfCardStack]
-        let location = cardStack.accessCardViewModel(at: indexOfCard) {
-            [unowned self] cardViewModel in self.canPush(cardViewModel: cardViewModel)
+    func moveCardViewModel(at indexPath: IndexPath) -> Int? {
+        guard cardStackViewModels.indices.contains(indexPath.section) else { return nil }
+        let cardStackViewModel = cardStackViewModels[indexPath.section]
+        let location = cardStackViewModel.accessCardViewModel(at: indexPath.item) {
+            [unowned self] cardViewModel in self.canPush(cardViewModel)
         }
         if let location = location {
-            let cardViewModels = cardStack.removeCardViewModels(from: indexOfCard)
-            cardViewModels?.reversed().forEach { cardStackViewModels[location].push(cardViewModel: $0) }
+            let cardViewModels = cardStackViewModel.removeCardViewModels(from: indexPath.item)
+            cardViewModels?.reversed().forEach { cardStackViewModels[location].push($0) }
             return location
         }
         return nil

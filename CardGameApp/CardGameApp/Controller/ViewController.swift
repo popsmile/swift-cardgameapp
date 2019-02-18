@@ -44,13 +44,12 @@ class ViewController: UIViewController {
     }
 
     @objc private func handleDoubleTapOfCardStacks(_ notification: Notification) {
-        guard let indexOfCard = notification.userInfo?[Notification.InfoKey.indexOfCard] as? Int,
-              let indexOfCardStack = notification.userInfo?[Notification.InfoKey.indexOfCardStack] as? Int else { return }
-        if let space = cardGameViewModel.moveToSpace(indexOfCard: indexOfCard, indexOfCardStack: indexOfCardStack) {
-            cardGameView.moveToSpace(indexOfCard: indexOfCard, indexOfCardStack: indexOfCardStack, to: space)
+        guard let indexPath = notification.userInfo?[Notification.InfoKey.indexPathOfCard] as? IndexPath else { return }
+        if let space = cardGameViewModel.moveCardFromStackToSpace(cardAt: indexPath) {
+            cardGameView.moveCardFromStackToSpace(indexPathOfCard: indexPath, to: space)
         }
-        if let stack = cardGameViewModel.moveToStack(indexOfCard: indexOfCard, indexOfCardStack: indexOfCardStack) {
-            cardGameView.moveToStack(indexOfCard: indexOfCard, indexOfCardStack: indexOfCardStack, to: stack)
+        if let stack = cardGameViewModel.moveCardFromStackToStack(cardAt: indexPath) {
+            cardGameView.moveCardFromStackToStack(indexPathOfCard: indexPath, to: stack)
         }
     }
 

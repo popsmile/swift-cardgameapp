@@ -54,8 +54,8 @@ class CardStackView: UIView {
         guard let cardView = sender.view else { return }
         guard let indexOfCard = subviews.firstIndex(of: cardView) else { return }
         
-        let userInfo = [Notification.InfoKey.indexOfCard: indexOfCard,
-                        Notification.InfoKey.indexOfCardStack: indexOfCardStack]
+        let indexPath = IndexPath(item: indexOfCard, section: indexOfCardStack)
+        let userInfo = [Notification.InfoKey.indexPathOfCard: indexPath]
         NotificationCenter.default.post(name: .cardDidDoubleTapped, object: self, userInfo: userInfo)
     }
 
@@ -100,4 +100,5 @@ extension Notification.Name {
 extension Notification.InfoKey {
     static let indexOfCard = "indexOfCard"
     static let indexOfCardStack = "indexOfCardStack"
+    static let indexPathOfCard = "indexPathOfCard"
 }

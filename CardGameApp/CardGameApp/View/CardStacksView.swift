@@ -38,10 +38,10 @@ class CardStacksView: UIStackView {
         }
     }
 
-    func pop(indexOfCard: Int, indexOfCardStack: Int) -> CardView? {
-        guard subviews.indices.contains(indexOfCardStack) else { return nil }
-        guard let cardStackView = subviews[indexOfCardStack] as? CardStackView else { return nil }
-        return cardStackView.pop(at: indexOfCard)
+    func pop(at indexPath: IndexPath) -> CardView? {
+        guard subviews.indices.contains(indexPath.section) else { return nil }
+        guard let cardStackView = subviews[indexPath.section] as? CardStackView else { return nil }
+        return cardStackView.pop(at: indexPath.item)
     }
 
     func push(_ cardView: CardView, at indexOfCardStack: Int) {
@@ -50,13 +50,13 @@ class CardStacksView: UIStackView {
         cardStackView.push(cardView: cardView)
     }
 
-    func moveCardView(indexOfCard: Int, indexOfCardStack: Int, to indexOfCardStackToMove: Int) {
-        guard subviews.indices.contains(indexOfCardStack) else { return }
+    func moveCardView(at indexPath: IndexPath, to indexOfCardStackToMove: Int) {
+        guard subviews.indices.contains(indexPath.section) else { return }
         guard subviews.indices.contains(indexOfCardStackToMove) else { return }
-        guard let cardStackView = subviews[indexOfCardStack] as? CardStackView else { return }
+        guard let cardStackView = subviews[indexPath.section] as? CardStackView else { return }
         guard let cardStackViewToMove = subviews[indexOfCardStackToMove] as? CardStackView else { return }
         
-        guard let cardViews = cardStackView.pop(from: indexOfCard) else { return }
+        guard let cardViews = cardStackView.pop(from: indexPath.item) else { return }
         cardViews.forEach { cardStackViewToMove.push(cardView: $0) }
     }
 

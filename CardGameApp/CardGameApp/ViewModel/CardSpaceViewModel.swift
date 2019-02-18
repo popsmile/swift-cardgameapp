@@ -15,15 +15,15 @@ class CardSpaceViewModel {
         self.cardViewModels = []
     }
 
-    func push(cardViewModel: CardViewModel) {
+    func push(_ cardViewModel: CardViewModel) {
         cardViewModels.append(cardViewModel)
     }
 
-    func canPush(cardViewModel card: CardViewModel) -> Bool {
-        if cardViewModels.isEmpty && card.isLowest { return true }
+    func canPush(_ cardViewModel: CardViewModel) -> Bool {
+        if cardViewModels.isEmpty && cardViewModel.isLowest { return true }
         guard let lastCard = cardViewModels.last else { return false }
-        guard card.hasSameSuit(with: lastCard) else { return false }
-        if card.isNextHigher(than: lastCard) { return true }
+        guard cardViewModel.hasSameSuit(with: lastCard) else { return false }
+        if cardViewModel.isNextHigher(than: lastCard) { return true }
         return false
     }
 

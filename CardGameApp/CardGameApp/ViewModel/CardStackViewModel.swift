@@ -45,15 +45,15 @@ class CardStackViewModel {
         }
     }
 
-    func push(cardViewModel: CardViewModel) {
+    func push(_ cardViewModel: CardViewModel) {
         cardViewModels.append(cardViewModel)
     }
 
-    func canPush(cardViewModel card: CardViewModel) -> Bool {
-        if cardViewModels.isEmpty && card.isHighest { return true }
+    func canPush(_ cardViewModel: CardViewModel) -> Bool {
+        if cardViewModels.isEmpty && cardViewModel.isHighest { return true }
         guard let lastCard = cardViewModels.last else { return false }
-        if card.hasSameColor(with: lastCard) { return false }
-        if card.isNextLower(than: lastCard) { return true }
+        if cardViewModel.hasSameColor(with: lastCard) { return false }
+        if cardViewModel.isNextLower(than: lastCard) { return true }
         return false
     }
 
