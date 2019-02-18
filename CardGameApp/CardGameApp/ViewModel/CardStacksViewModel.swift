@@ -58,11 +58,16 @@ extension CardStacksViewModel {
         return cardStackViewModels[indexOfcardStack].removeCardViewModels(from: indexOfCard, toTheEnd: toTheEnd)
     }
 
-    private func canPush(cardViewModel card: CardViewModel) -> Int? {
+    func canPush(cardViewModel card: CardViewModel) -> Int? {
         for (index, cardStack) in cardStackViewModels.enumerated() {
             if cardStack.canPush(cardViewModel: card) { return index }
         }
         return nil
+    }
+
+    func push(cardViewModel: CardViewModel, at indexOfCardStack: Int) {
+        guard cardStackViewModels.indices.contains(indexOfCardStack) else { return }
+        cardStackViewModels[indexOfCardStack].push(cardViewModel: cardViewModel)
     }
 
     func moveCardViewModel(at indexOfCard: Int, of indexOfCardStack: Int) -> Int? {
@@ -73,7 +78,7 @@ extension CardStacksViewModel {
         }
         if let location = location {
             let cardViewModels = cardStack.removeCardViewModels(from: indexOfCard)
-            cardViewModels?.forEach { cardStackViewModels[location].push(cardViewModel: $0) }
+            cardViewModels?.reversed().forEach { cardStackViewModels[location].push(cardViewModel: $0) }
             return location
         }
         return nil

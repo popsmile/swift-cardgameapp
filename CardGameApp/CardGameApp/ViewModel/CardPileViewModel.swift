@@ -29,3 +29,12 @@ class CardPileViewModel {
     }
 
 }
+
+extension CardPileViewModel {
+
+    func accessCardViewModel(_ deliver: (CardViewModel) -> Int?) -> Int? {
+        guard let lastCardViewModel = cardViewModels.last else { return nil }
+        return deliver(lastCardViewModel)
+    }
+
+}

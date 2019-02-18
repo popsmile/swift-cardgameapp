@@ -49,8 +49,32 @@ extension CardGameViewModel {
         return nil
     }
 
+    func moveCardFromPileToSpace() -> Int? {
+        let space = cardPileViewModel.accessCardViewModel {
+            [unowned self] cardViewModel in self.cardSpacesViewModel.canPush(cardViewModel: cardViewModel)
+        }
+        if let location = space {
+            guard let cardViewModel = cardPileViewModel.pop() else { return nil }
+            cardSpacesViewModel.push(cardViewModel: cardViewModel, at: location)
+            return location
+        }
+        return nil
+    }
+
     func moveToStack(indexOfCard: Int, indexOfCardStack: Int) -> Int? {
         return cardStacksViewModel.moveCardViewModel(at: indexOfCard, of: indexOfCardStack)
+    }
+
+    func moveCardFromPileToStack() -> Int? {
+        let stack = cardPileViewModel.accessCardViewModel {
+            [unowned self] cardViewModel in self.cardStacksViewModel.canPush(cardViewModel: cardViewModel)
+        }
+        if let location = stack {
+            guard let cardViewModel = cardPileViewModel.pop() else { return nil }
+            cardStacksViewModel.push(cardViewModel: cardViewModel, at: location)
+            return location
+        }
+        return nil
     }
 
     /* Shake Motion */
