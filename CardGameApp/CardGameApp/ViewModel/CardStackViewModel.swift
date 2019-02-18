@@ -28,6 +28,7 @@ class CardStackViewModel {
 
     private func flipLastCard() {
         if let lastCardViewModel = cardViewModels.last {
+            if lastCardViewModel.opened { return }
             lastCardViewModel.flip()
         }
     }
@@ -45,10 +46,6 @@ class CardStackViewModel {
         }
     }
 
-    func push(_ cardViewModel: CardViewModel) {
-        cardViewModels.append(cardViewModel)
-    }
-
     func canPush(_ cardViewModel: CardViewModel) -> Bool {
         if cardViewModels.isEmpty && cardViewModel.isHighest { return true }
         guard let lastCard = cardViewModels.last else { return false }
@@ -57,8 +54,24 @@ class CardStackViewModel {
         return false
     }
 
+    func push(_ cardViewModel: CardViewModel) {
+        cardViewModels.append(cardViewModel)
+    }
+
+    func pop(from index: Int, toTheEnd: Bool = true) -> [CardViewModel]? {
+        guard cardViewModels.indices.contains(index) else { return nil }
+        let lastIndex = toTheEnd ? cardViewModels.count : index + 1
+        var removed = [CardViewModel]()
+        for _ in index..<lastIndex {
+            removed.append(cardViewModels.removeLast())
+        }
+        flipLastCard()
+        return removed
+    }
+
 }
 
+/* MARK: Access to inner properties by closure */
 extension CardStackViewModel {
 
     func iterateCardViewModels(_ deliver: (CardViewModel) -> Void) {
@@ -71,17 +84,6 @@ extension CardStackViewModel {
         guard cardViewModels.indices.contains(index) else { return nil }
         guard cardViewModels[index].opened else { return nil }
         return deliver(cardViewModels[index])
-    }
-
-    func removeCardViewModels(from index: Int, toTheEnd: Bool = true) -> [CardViewModel]? {
-        guard cardViewModels.indices.contains(index) else { return nil }
-        var removed = [CardViewModel]()
-        let lastIndex = toTheEnd ? cardViewModels.count : index + 1
-        for _ in index..<lastIndex {
-            removed.append(cardViewModels.removeLast())
-        }
-        flipLastCard()
-        return removed
     }
 
 }

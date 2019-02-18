@@ -30,6 +30,7 @@ class CardPileViewModel {
 
 }
 
+/* MARK: Access to inner properties by closure */
 extension CardPileViewModel {
 
     func accessCardViewModel(_ deliver: (CardViewModel) -> Int?) -> Int? {

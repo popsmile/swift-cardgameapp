@@ -42,7 +42,7 @@ extension CardGameViewModel {
             [unowned self] cardViewModel in self.cardSpacesViewModel.canPush(cardViewModel)
         }
         if let location = space {
-            let cardViewModels = cardStacksViewModel.removeCardViewModels(from: indexPath, toTheEnd: false)
+            let cardViewModels = cardStacksViewModel.pop(from: indexPath, toTheEnd: false)
             cardViewModels?.forEach { cardSpacesViewModel.push($0, at: location)}
             return location
         }

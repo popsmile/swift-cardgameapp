@@ -52,6 +52,7 @@ class CardDeckViewModel {
 
 }
 
+/* MARK: Access to inner properties by closure */
 extension CardDeckViewModel {
 
     func iterateCardViewModels(_ deliver: (CardViewModel) -> Void) {

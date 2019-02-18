@@ -38,26 +38,6 @@ class CardStacksViewModel {
         }
     }
 
-}
-
-extension CardStacksViewModel {
-
-    func iterateCardStackViewModels(_ deliver: (CardStackViewModel) -> Void) {
-        for cardStackViewModel in cardStackViewModels {
-            deliver(cardStackViewModel)
-        }
-    }
-
-    func accessCardViewModel(at indexPath: IndexPath, _ deliver: (CardViewModel) -> Int?) -> Int? {
-        guard cardStackViewModels.indices.contains(indexPath.section) else { return nil }
-        return cardStackViewModels[indexPath.section].accessCardViewModel(at: indexPath.item, by: deliver)
-    }
-
-    func removeCardViewModels(from indexPath: IndexPath, toTheEnd: Bool = true) -> [CardViewModel]? {
-        guard cardStackViewModels.indices.contains(indexPath.section) else { return nil }
-        return cardStackViewModels[indexPath.section].removeCardViewModels(from: indexPath.item, toTheEnd: toTheEnd)
-    }
-
     func canPush(_ cardViewModel: CardViewModel) -> Int? {
         for (index, cardStack) in cardStackViewModels.enumerated() {
             if cardStack.canPush(cardViewModel) { return index }
@@ -70,6 +50,11 @@ extension CardStacksViewModel {
         cardStackViewModels[indexOfCardStack].push(cardViewModel)
     }
 
+    func pop(from indexPath: IndexPath, toTheEnd: Bool = true) -> [CardViewModel]? {
+        guard cardStackViewModels.indices.contains(indexPath.section) else { return nil }
+        return cardStackViewModels[indexPath.section].pop(from: indexPath.item, toTheEnd: toTheEnd)
+    }
+
     func moveCardViewModel(at indexPath: IndexPath) -> Int? {
         guard cardStackViewModels.indices.contains(indexPath.section) else { return nil }
         let cardStackViewModel = cardStackViewModels[indexPath.section]
@@ -77,11 +62,27 @@ extension CardStacksViewModel {
             [unowned self] cardViewModel in self.canPush(cardViewModel)
         }
         if let location = location {
-            let cardViewModels = cardStackViewModel.removeCardViewModels(from: indexPath.item)
+            let cardViewModels = cardStackViewModel.pop(from: indexPath.item)
             cardViewModels?.reversed().forEach { cardStackViewModels[location].push($0) }
             return location
         }
         return nil
+    }
+
+}
+
+/* MARK: Access to inner properties by closure */
+extension CardStacksViewModel {
+
+    func iterateCardStackViewModels(_ deliver: (CardStackViewModel) -> Void) {
+        for cardStackViewModel in cardStackViewModels {
+            deliver(cardStackViewModel)
+        }
+    }
+
+    func accessCardViewModel(at indexPath: IndexPath, _ deliver: (CardViewModel) -> Int?) -> Int? {
+        guard cardStackViewModels.indices.contains(indexPath.section) else { return nil }
+        return cardStackViewModels[indexPath.section].accessCardViewModel(at: indexPath.item, by: deliver)
     }
 
 }
