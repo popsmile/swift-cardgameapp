@@ -49,6 +49,7 @@ extension CardStacksViewModel {
     }
 
     func accessCardViewModel(at indexOfCard: Int, of indexOfcardStack: Int, _ deliver: (CardViewModel) -> Int?) -> Int? {
+        guard cardStackViewModels.indices.contains(indexOfcardStack) else { return nil }
         return cardStackViewModels[indexOfcardStack].accessCardViewModel(at: indexOfCard, by: deliver)
     }
 

@@ -10,7 +10,7 @@ import Foundation
 
 class CardViewModel {
     private var card: Card
-    private var opened: Bool
+    private(set) var opened: Bool
 
     required init(card: Card) {
         self.card = card
