@@ -3,6 +3,7 @@
 1. <a href="#1-카드게임판-시작하기">카드게임판 시작하기</a>
 2. <a href="#2-카드-UI">카드 UI</a>
 3. <a href="#3-카드스택-화면-표시">카드스택 화면 표시</a>
+4. <a href="#4-제스처-인식과-게임-동작">제스처 인식과 게임 동작</a>
 
 <br>
 
@@ -316,3 +317,154 @@ CardView와 CardViewModel 관계를 중심으로 대폭 수정헀습니다.
 `CardDeckView` 에 터치 이벤트가 발생할 경우, `CardDeckViewModel` 내부의 `CardViewModel` 배열 중 마지막 요소가 `flip` 됩니다. `CardViewModel` 에서 관리하는 `opened` 프로퍼티가 변경되는 경우 `.cardDidFlip` 노티피케이션이 포스트되고, 이 뷰 모델을 소유한 `CardView` 에서 노티피케이션을 받아 뷰를 다시 그리도록 구현했습니다.
 
 ShakeMotion이 발생하여 카드게임 판을 초기화시킬 경우에도 이와 같은 방식으로 구현했습니다.
+
+<br>
+
+## 4. 제스처 인식과 게임 동작
+
+### 요구사항
+
+- [solitaire-klondike](https://www.solitaire-klondike.com/klondike.html) 게임과 동일한 동작
+  - 카드 이미지 앞면이 보이는 카드만 더블 탭이 가능하도록
+  - 카드 더블 탭 시, 아래 규칙을 바탕으로 이동하도록
+    - 좌측 상단에 **같은 모양의 Suit, 한 단계 낮은Rank**를 가진 카드가 있을 때 이동 (A부터 2, 3, ... K 까지 쌓는다.)
+    - 카드 스택 중에 **다른 색의 Suit와 한 단계 높은 Rank**를 가진 카드가 스택 중에 가장 마지막에 위치해 있을 때 이동 (K부터 Q, J, ... A 까지 쌓는다.)
+  - 카드 덱의 카드를 모두 오픈했을 경우, 리프레시 이미지 클릭 시 다시 덱으로 쌓이도록
+  - Shake 이벤트 발생 시 카드게임을 초기 상태로
+
+<br>
+
+### 구현방법
+
+#### 1. 두 개의 카드 객체를 비교할 수 있는 메소드 구현
+
+`Card` 클래스에 비교 메소드를 추가하고, 이를 활용해서 `CardViewModel` 를 비교할 수 있도록 구현했습니다.
+
+```swift
+class CardViewModel {
+    ...
+	var isLowest: Bool
+    var isHighest: Bool
+
+    func hasSameSuit(with cardViewModel: CardViewModel) -> Bool
+    func hasSameColor(with cardViewModel: CardViewModel) -> Bool
+    func isNextHigher(than cardViewModel: CardViewModel) -> Bool
+    func isNextLower(than cardViewModel: CardViewModel) -> Bool
+    ...
+}
+```
+
+<br>
+
+#### 2. 커스텀 UIGestureRecognizer 생성
+
+더블 탭만을 인식하는 클래스를 만들어주기 위해, `UITapGestureRecognizer` 를 상속받는 커스텀 클래스를 생성해주었습니다.
+
+```swift
+class DoubleTapGestureRecognizer: UITapGestureRecognizer {
+
+    override init(target: Any?, action: Selector?) {
+        super.init(target: target, action: action)
+        numberOfTapsRequired = 2
+    }
+
+}
+
+```
+
+<br>
+
+#### 3. 뷰마다 필요한 GesutreRecognizer 추가
+
+`CardStackView` 하위 뷰로 `CardView` 를 추가할 때, `DoubleTapGestureRecognizer` 를 만들어 할당해줍니다. 더블 탭 제스처가 일어났을 경우, 해당 스택 뷰에서 위치정보를 담아 노티피케이션을 포스트합니다. 위치정보는 `IndexPath` 를 활용해보았습니다. 그 이유는 카드 위치를 알기 위해 카드 인덱스를 포함하여 카드스택의 인덱스 또한 알아야하기 때문입니다.
+
+```swift
+class CardStackView: UIView {
+    ...
+    private func addDoubleTapGestureRecognizer(to cardView: CardView) {
+        let doubleTapGestureRecognizer = DoubleTapGestureRecognizer(target: self, action: #selector(handleDoubleTapGesture(sender:)))
+        cardView.addGestureRecognizer(doubleTapGestureRecognizer)
+    }
+    
+    @objc private func handleDoubleTapGesture(sender: DoubleTapGestureRecognizer) {
+        guard let cardStacksView = superview as? UIStackView else { return }
+        guard let indexOfCardStack = cardStacksView.arrangedSubviews.firstIndex(of: self) else { return }
+        
+        guard let cardView = sender.view else { return }
+        guard let indexOfCard = subviews.firstIndex(of: cardView) else { return }
+        
+        let indexPath = IndexPath(item: indexOfCard, section: indexOfCardStack)
+        let userInfo = [Notification.InfoKey.indexPathOfCard: indexPath]
+        NotificationCenter.default.post(name: .cardDidDoubleTapped, 
+                                        object: self, userInfo: userInfo)
+    }
+    ...
+}
+```
+
+`CardView` 가 `CardDeckView` 의 하위 뷰로 추가될 경우 `UITapGestureRecognizer` 를 할당해주었고, 이전 스텝과 동일하게 `CardPileView` 로 이동하면서 카드가 뒤집힙니다.
+
+또한, GesutreRecognizer가 할당되었던 `CardView` 가 상위 뷰에서 빠지거나 다른 뷰의 하위 뷰로 추가될 경우, 이전 GesutreRecognizer를 삭제하고 새롭게 할당해주었습니다.
+
+<br>
+
+#### 4. 카드 더블 탭 시 뷰 컨트롤러가 동작 개시
+
+더블 탭 시 뷰에서 포스트하는 `.cardDidDoubleTapped` `.cardPileDidDoubleTapped` 노티피케이션을 뷰 컨트롤러가 관찰하고 있습니다. 
+
+아래 `handleDoubleTapOfCardStacks(_:)` 메소드는 노티피케이션에 담긴 `userInfo` 에서 indexPath를 가져와 `cardGameViewModel` 에 이동가능한 위치가 있는지 확인합니다. 이동가능한 위치가 있다면, `CardGameView` 에 이 정보를 전달해 뷰를 이동시킵니다. 이동하고자하는 위치는 카드스택보다 좌측 상단의 스페이스 공간을 우선적으로 확인합니다.
+
+```swift
+class ViewController: UIViewController {
+	...
+    private func registerAsObserver() {
+        ...
+        NotificationCenter.default
+        .addObserver(self, selector: #selector(handleDoubleTapOfCardStacks(_:)),
+                     name: .cardDidDoubleTapped, object: nil)
+        NotificationCenter.default
+        .addObserver(self, selector: #selector(handleDoubleTapOfCardPile),
+                     name: .cardPileDidDoubleTapped, object: nil)
+        ...
+    }
+
+    @objc private func handleDoubleTapOfCardStacks(_ notification: Notification) {
+        guard let indexPath = notification
+            .userInfo?[Notification.InfoKey.indexPathOfCard] as? IndexPath else { return }
+            
+        if let space = cardGameViewModel.moveCardFromStackToSpace(cardAt: indexPath) {
+            cardGameView.moveCardFromStackToSpace(indexPathOfCard: indexPath, to: space)
+        }
+        if let stack = cardGameViewModel.moveCardFromStackToStack(cardAt: indexPath) {
+            cardGameView.moveCardFromStackToStack(indexPathOfCard: indexPath, to: stack)
+        }
+    }
+	...
+}
+```
+
+<br>
+
+#### 5. ShakeMotion 발생 시 카드게임 초기화
+
+ShakeMotion이 발생하면 뷰 컨트롤러가 기존 `CardGameView` 를 하위뷰에서 제거하고,  `CardGameView` 와 `CardGameViewModel` 를 새롭게 만들어 화면과 카드게임을 모두 초기상태로 만듭니다.
+
+> 아쉬운 점
+>
+> 기존의 뷰와 뷰 모델을 삭제하고 재생성하는 방법보다 재사용하는 방법을 활용하고자 두-세가지 방법으로 시도해보았습니다. 하지만, 매칭된 뷰와 뷰 모델 중 일부가 동일한 위치로 이동하지 않아 자꾸 어긋나게 동작하여 결국 방향을 바꾸었습니다...😥
+
+<br>
+
+### 실행화면
+
+> 완성일자: 2019.02.19 15:09
+>
+> 시뮬레이터는 iPhone 8 Plus 입니다.
+
+[solitaire-klondike](https://www.solitaire-klondike.com/klondike.html) 게임 규칙을 바탕으로 동작되고 있습니다.
+
+![Feb-19-2019](./images/step4/Feb-19-2019.gif)
+
+Shake 모션 발생 시, 카드게임이 리셋됩니다.
+
+![Feb-19-2019-2](./images/step4/Feb-19-2019-2.gif)
