@@ -36,6 +36,14 @@ extension CardGameViewModel {
         cardPileViewModel.push(cardViewModel)
     }
 
+    func moveCardViewModelsToCardDeckViewModel() {
+        while !cardPileViewModel.isEmpty {
+            guard let cardViewModel = cardPileViewModel.pop() else { return }
+            cardViewModel.flip()
+            cardDeckViewModel.push(cardViewModel)
+        }
+    }
+
     /* Double Tap */
     func moveCardFromStackToSpace(cardAt indexPath: IndexPath) -> Int? {
         let space = cardStacksViewModel.accessCardViewModel(at: indexPath) {
@@ -75,33 +83,6 @@ extension CardGameViewModel {
             return location
         }
         return nil
-    }
-
-    /* Shake Motion */
-    func reset() {
-        defer { replaceViewModelsByNewGame() }
-        moveCardViewModelsToCardDeckViewModel()
-        if let cardViewModelsRemained = cardStacksViewModel.rearrangeCardViewModels() {
-            cardViewModelsRemained.forEach { cardDeckViewModel.push($0) }
-        }
-        guard let cardViewModels = cardSpacesViewModel.popAll() else { return }
-        if let cardViewModelsRemained = cardStacksViewModel.fillCardStackViewModels(with: cardViewModels) {
-            cardViewModelsRemained.forEach { cardDeckViewModel.push($0) }
-        }
-    }
-
-    private func replaceViewModelsByNewGame() {
-        cardGame.reset()
-        cardStacksViewModel.replace(cardStacks: cardGame.cardStacks)
-        cardDeckViewModel.replace(cardDeck: cardGame.cardDeck)
-    }
-
-    func moveCardViewModelsToCardDeckViewModel() {
-        while !cardPileViewModel.isEmpty {
-            guard let cardViewModel = cardPileViewModel.pop() else { return }
-            cardViewModel.flip()
-            cardDeckViewModel.push(cardViewModel)
-        }
     }
 
 }

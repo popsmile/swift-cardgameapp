@@ -28,15 +28,13 @@ class CardViewModel {
     }
 
     func open() {
-        if !opened {
-            flip()
-        }
+        if opened { return }
+        flip()
     }
 
     func close() {
-        if opened {
-            flip()
-        }
+        guard opened else { return }
+        flip()
     }
 
     func replace(card: Card) {

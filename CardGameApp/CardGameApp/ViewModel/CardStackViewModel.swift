@@ -28,32 +28,8 @@ class CardStackViewModel {
 
     private func flipLastCard() {
         if let lastCardViewModel = cardViewModels.last {
-            if lastCardViewModel.opened { return }
-            lastCardViewModel.flip()
+            lastCardViewModel.open()
         }
-    }
-
-    var count: Int {
-        return cardViewModels.count
-    }
-
-    func replace(cardStack: CardStack) {
-        self.cardStack = cardStack
-        replaceCardViewModels()
-        closeCardsExceptLastCard()
-    }
-
-    private func replaceCardViewModels() {
-        for index in cardViewModels.indices {
-            cardStack.accessCard(at: index) { [unowned self] card in
-                self.cardViewModels[index].replace(card: card)
-            }
-        }
-    }
-
-    private func closeCardsExceptLastCard() {
-        cardViewModels.forEach { $0.close() }
-        flipLastCard()
     }
 
     func canPush(_ cardViewModel: CardViewModel) -> Bool {

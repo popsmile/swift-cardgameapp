@@ -60,6 +60,13 @@ extension CardGameView {
         cardPileView.push(cardView)
     }
 
+    func moveCardViewsToCardDeckView() {
+        while !cardPileView.subviews.isEmpty {
+            guard let cardView = cardPileView.pop() else { break }
+            cardDeckView.push(cardView)
+        }
+    }
+
     /* Double Tap */
     func moveCardFromStackToSpace(indexPathOfCard indexPath: IndexPath, to space: Int) {
         guard let cardViews = cardStacksView.pop(at: indexPath) else { return }
@@ -78,25 +85,6 @@ extension CardGameView {
     func moveCardFromPileToStack(at indexOfStack: Int) {
         guard let cardView = cardPileView.pop() else { return }
         cardStacksView.push(cardView, at: indexOfStack)
-    }
-
-    /* Shake Motion */
-    func reset() {
-        moveCardViewsToCardDeckView()
-        if let cardViewsRemained = cardStacksView.rearrangeCardViews() {
-            cardViewsRemained.forEach { cardDeckView.push($0) }
-        }
-        guard let cardViews = cardSpacesView.popAll() else { return }
-        if let cardViewsRemained = cardStacksView.fillCardStackViews(with: cardViews) {
-            cardViewsRemained.forEach { cardDeckView.push($0) }
-        }
-    }
-
-    func moveCardViewsToCardDeckView() {
-        while !cardPileView.subviews.isEmpty {
-            guard let cardView = cardPileView.pop() else { break }
-            cardDeckView.push(cardView)
-        }
     }
 
 }
