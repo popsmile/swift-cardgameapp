@@ -65,9 +65,7 @@ class CardStackView: UIView {
     }
 
     func push(cardView: CardView) {
-        if subviews.isEmpty {
-            cardView.frame.origin = .zero
-        }
+        cardView.frame.origin = .zero
         if let lastCardView = subviews.last {
             cardView.frame.origin.y = lastCardView.frame.origin.y + spacing
         }

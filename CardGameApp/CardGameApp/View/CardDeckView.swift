@@ -9,6 +9,7 @@
 import UIKit
 
 class CardDeckView: UIImageView {
+    private let spacing: CGFloat = 0.1
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -67,6 +68,10 @@ class CardDeckView: UIImageView {
 
     func push(_ cardView: CardView) {
         cardView.frame.origin = .zero
+        if let lastCardView = subviews.last {
+            cardView.frame.origin.x = lastCardView.frame.origin.x + spacing
+            cardView.frame.origin.y = lastCardView.frame.origin.y + spacing
+        }
         addSubview(cardView)
         addTapGestureRecognizer(to: cardView)
     }
